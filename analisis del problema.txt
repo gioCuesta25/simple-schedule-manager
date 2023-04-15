@@ -1,0 +1,11 @@
+Parcial 1: Aplicación para gestionar las horas de estudio
+
+Modulos de la aplicación:
+
+1. Gestionar informacion de cursos: este modulo debe estar en capacidad de almacenar informacion relevante sobre los diferentes cursos dictados por la facultad de ingenieria de la Universidad de Antioquia.
+	
+	- La información será guardada en un archivo llamado "cursos.txt"
+	- El archivo tendrá los siguientes campos: Código, Nombre, HTD (horas trabajo con docente), HTI (horas de trabajo independiente), 	Créditos 
+	- Para facilitar la lectura y escritura en el archivo usaré un formato en el cual los campos esten separados por comas "," para poder 	diferenciarlos entre si
+	- Cada linea del archivo corresponde a un curso
+	- Todos los campos son obligatorios al momento de agregar un curso al documento, a excepción de el HTI que sera calculado a partir de 	los creditos y de las horas de cada curso durante el semestre
