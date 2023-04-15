@@ -5,7 +5,16 @@ Modulos de la aplicación:
 1. Gestionar informacion de cursos: este modulo debe estar en capacidad de almacenar informacion relevante sobre los diferentes cursos dictados por la facultad de ingenieria de la Universidad de Antioquia.
 	
 	- La información será guardada en un archivo llamado "cursos.txt"
-	- El archivo tendrá los siguientes campos: Código, Nombre, HTD (horas trabajo con docente), HTI (horas de trabajo independiente), 	Créditos 
+	- El archivo tendrá los siguientes campos: Código, Nombre, HTD (horas trabajo con docente), HTI (horas de trabajo independiente), 	Créditos, Laboratorio ("S" si tiene lab o "N" si no tiene lab) 
 	- Para facilitar la lectura y escritura en el archivo usaré un formato en el cual los campos esten separados por comas "," para poder 	diferenciarlos entre si
 	- Cada linea del archivo corresponde a un curso
 	- Todos los campos son obligatorios al momento de agregar un curso al documento, a excepción de el HTI que sera calculado a partir de 	los creditos y de las horas de cada curso durante el semestre
+
+2. Agregar horario:
+	- El horario estará guardado en un archivo llamado "horario.txt"
+	- Los campos para este archivo serán: Codigo de la materia, horario (en el formato MJ8-10, las horas deberan estar separadas por un 	guion para poder ser diferenciadas), laboratorio (este campo seria similar al horario solo que no todas las materias tendrian horario 	de laboratorio en ese caso usaria la letra "N" mayuscula para identificar que ese curso no cuenta con horario de laboratorio y en caso 	contrario se agregaria el horario en formato MJ8-10)
+	- Validaciones a tener en cuenta:
+		- No superar el numero maximo de creditos de la universidad para un semestre (24)
+		- Las horas de clase van desde las 6am hasta las 10pm
+		- No se pueden agregar dos materias en el mismo horario, es decir, mismo dia y misma hora
+		- No se debe superar las horas de trabajo docente la momento de agregar una materia en cada horario 
