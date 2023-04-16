@@ -12,7 +12,9 @@ Modulos de la aplicación:
 
 2. Agregar horario:
 	- El horario estará guardado en un archivo llamado "horario.txt"
-	- Los campos para este archivo serán: Codigo de la materia, horario (en el formato MJ8-10, las horas deberan estar separadas por un 	guion para poder ser diferenciadas), laboratorio (este campo seria similar al horario solo que no todas las materias tendrian horario 	de laboratorio en ese caso usaria la letra "N" mayuscula para identificar que ese curso no cuenta con horario de laboratorio y en caso 	contrario se agregaria el horario en formato MJ8-10)
+	- El formato del documento está basado en el mismo formato que usa el sistema de matriculas de la Universidad de Antioquia, en cual 	cada fila corresponde a una hora del día (el día en la universidad va desde las 6am hasta las 10pm), es decir, la primera fila seria 	el tiempo correspondido desde las 6am a 7am, la segunda fila seria 7am a 8am y así sucesivamente hasta las 10pm. Y cada columna 	separada por comas seria un dia de la semana desde el Lunes hasta el Sábado.
+	- Para saber cuanto dura cada clase se posicionaria el codigo del curso en la hora (fila) y el día (columna) que le corresponda, por 	ejemplo si la materia 1234567 es los lunes de 6am a 10am, aparecería en la primera columna y el codigo 1234567 apareceria repetido 	en las primeras cuatro fila lo cual me permitiria manejar todo el horario como una matriz y realizar las validaciones mucho mas 	facil
+	- Para representar los espacios vacios o los populares "huecos" en el horario usaré el caracter "0" indicando que a esa hora, ese 	día no hay ningun curso a esa horario 
 	- Validaciones a tener en cuenta:
 		- No superar el numero maximo de creditos de la universidad para un semestre (24)
 		- Las horas de clase van desde las 6am hasta las 10pm
