@@ -337,6 +337,7 @@ void addClass(char ***matrix)
             cout << "Dia: ";
             cin >> day;
 
+            modifySchedule(matrix, courseCode, startHour, endHour, day);
             break;
         }
         case 2: {
@@ -360,4 +361,17 @@ void printInstructions()
     cout << "2. Luego ingresa la hora de inicio y la hora de fin, debe ser en formato 24h.\nEjemplo: si tu clase inicia a las 10am y finaliza a las 2pm debes ingresar 10 y 14 respectivamente" << endl << endl;
     cout << "3. Ingresa el dia, en este caso debes ingresar el numero del dia.\nEjemplo: para el lunes ingresa el 1, el 2 para el martes, 3 para el miercoles y así hasta el domingo" << endl << endl;
     cout << "************************************************************" << endl << endl;
+}
+
+void modifySchedule(char ***matrix, char code[], int start, int end, int day)
+{
+    int duration = end - start;
+    int row = start - 6;
+    int col = day - 1;
+
+    for (int i = 0; i < duration; i++) {
+        matrix[row + i][col] = code;
+    }
+
+    printSchedule(matrix);
 }

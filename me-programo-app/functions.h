@@ -31,4 +31,5 @@ void printSchedule(char ***matrix);
 void updateSchedule(char ***matrix);
 void loadSchedule(fstream &file, char***matrix);
 void addClass(char ***matrix);
+void modifySchedule(char ***matrix, char code[8], int start, int end, int day);
 #endif // FUNCTIONS_H
