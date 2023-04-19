@@ -6,12 +6,19 @@
 
 using namespace std;
 
+int ROWS = 18;
+int COLS = 7;
+int ELEMENT_LENGTH = 8;
+
 // Utilidades
 void writeInFile(fstream &file, char* content, unsigned long long length);
 void readFile(fstream &file, char* content, unsigned long long length);
 unsigned long long getFileLength(fstream &file);
 int menu();
 void split(char* cadena);
+void freeMemory(char***);
+void printInstructions();
+
 
 // Functions for manage the courses
 void manageCourses();
@@ -20,6 +27,8 @@ void showAllCourses(fstream &file);
 
 // Functions for manage the schedule
 void manageSchedule();
-void printSchedule(fstream &file);
-void updateSchedule(fstream &file);
+void printSchedule(char ***matrix);
+void updateSchedule(char ***matrix);
+void loadSchedule(fstream &file, char***matrix);
+void addClass(char ***matrix);
 #endif // FUNCTIONS_H

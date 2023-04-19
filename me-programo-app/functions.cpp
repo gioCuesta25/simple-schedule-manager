@@ -4,7 +4,6 @@
 
 using namespace std;
 
-
 void writeInFile(fstream &file, char* content, unsigned long long length)
 {
     file.write(content, length);
@@ -160,10 +159,11 @@ void showAllCourses(fstream &file)
     }
 
     unsigned long long totalLines = j;
-
+    cout << "******************** CURSOS DISPONIBLES ********************" << endl;
     for (unsigned long long j = 0; j < totalLines; j++) {
         cout << courses[j] << endl;
     }
+    cout << "************************************************************" << endl << endl;
 }
 
 
@@ -183,14 +183,17 @@ void manageSchedule()
 
     fstream schedule;
     schedule.open("horario.txt", ios::binary | ios::in | ios::out | ios::ate);
+    char*** matrix = new char**[ROWS];
+
+    loadSchedule(schedule, matrix); // Llena la matriz con el horario obtenido desde el archivo
 
     switch (option) {
     case 1:{
-        printSchedule(schedule);
+        printSchedule(matrix);
         break;
     }
     case 2: {
-        updateSchedule(schedule);
+        updateSchedule(matrix);
         break;
     }
     default: {
@@ -198,46 +201,11 @@ void manageSchedule()
         break;
     }
     }
-
+    //freeMemory(matrix);
 }
 
-void printSchedule(fstream &file)
+void printSchedule(char***matrix)
 {
-    file.seekg(0, file.end);
-    unsigned long long fileLength = file.tellg();
-    file.seekg(0, file.beg);
-
-    char * fileContent = new char[fileLength];
-
-    file.read(fileContent, fileLength);
-
-    int ROWS = 18;
-    int COLS = 7;
-    int ELEMENT_LENGTH = 8;
-    char matrix[ROWS][COLS][ELEMENT_LENGTH];
-    char delimiter = ',';
-
-    int row = 0;
-    int col = 0;
-    int elementIndex = 0;
-
-    for (unsigned long long i = 0; i < fileLength; i++) {
-        if (fileContent[i] == delimiter) {
-            matrix[row][col][elementIndex] = '\0';
-            col++;
-            elementIndex = 0;
-            continue;
-        }
-        if (fileContent[i] == '\n') {
-            matrix[row][col][elementIndex] = '\0';
-            row++;
-            col = 0;
-            elementIndex = 0;
-            continue;
-        }
-        matrix[row][col][elementIndex] = fileContent[i];
-        elementIndex++;
-    }
     cout << endl << endl;
     cout << "Lunes" << '\t' << "Martes" << '\t' << "Mierco" << '\t' << "Jueves" << '\t' << "Viernes" << '\t' << "Sabado" << '\t' << "Domingo" << endl;
     for (int k = 0; k < ROWS; k++) {
@@ -248,7 +216,33 @@ void printSchedule(fstream &file)
     }
 }
 
-void updateSchedule(fstream &file)
+void updateSchedule(char ***matrix)
+{
+    int option;
+
+    cout << "************* Accines *************" << endl;
+    cout << "1. Agregar una clase" << endl;
+    cout << "2. Agregar horas de trabajo independiente para una clase" << endl;
+    cout << "3. Quitar una clase" << endl;
+
+    cout << "Selecciona un accion: ";
+    cin >> option;
+
+    switch (option) {
+    case 1: {
+        addClass(matrix);
+        break;
+    }
+    default:{
+        cout << "Opcion invalida" << endl;
+        break;
+    }
+    }
+
+}
+
+
+void loadSchedule(fstream &file, char ***matrix)
 {
     file.seekg(0, file.end);
     unsigned long long fileLength = file.tellg();
@@ -258,15 +252,19 @@ void updateSchedule(fstream &file)
 
     file.read(fileContent, fileLength);
 
-    int ROWS = 18;
-    int COLS = 7;
-    int ELEMENT_LENGTH = 8;
-    char matrix[ROWS][COLS][ELEMENT_LENGTH];
     char delimiter = ',';
 
     int row = 0;
     int col = 0;
     int elementIndex = 0;
+
+    for (int i = 0; i < ROWS; i++)
+    {
+        matrix[i] = new char*[COLS];
+        for (int j = 0; j < COLS; j++) {
+            matrix[i][j] = new char[ELEMENT_LENGTH];
+        }
+    }
 
     for (unsigned long long i = 0; i < fileLength; i++) {
         if (fileContent[i] == delimiter) {
@@ -286,11 +284,80 @@ void updateSchedule(fstream &file)
         elementIndex++;
     }
 
-    for (int k = 0; k < ROWS; k++) {
-        for (int l = 0; l < COLS; l++) {
-            cout << matrix[k][l] << " ";
-        }
-        cout << endl;
-    }
 }
 
+void freeMemory(char ***matrix)
+{
+    // Limpiar la memoria
+    for (int i = 0; i < ROWS; i++)
+    {
+        for (int j = 0; j < COLS; j++) {
+            delete[] matrix[i][j];
+        }
+        delete[] matrix[i];
+    }
+
+    delete[] matrix;
+}
+
+void addClass(char ***matrix)
+{
+    fstream courses;
+    courses.open("cursos.txt", ios::binary | ios::in | ios::out | ios::ate);
+
+    int option;
+
+    do {
+        cout << "************* Acciones *************" << endl;
+        cout << "1. Agregar" << endl;
+        cout << "2. Guardar" << endl;;
+
+        cout << "Selecciona un accion: ";
+        cin >> option;
+
+        switch (option) {
+        case 1: {
+            printInstructions();
+            showAllCourses(courses);
+
+
+            char courseCode[8];
+            int startHour, endHour, day;
+
+            cin.ignore();
+            cout << "Ingresa el codigo del curso: ";
+            cin.getline(courseCode, 8);
+
+            cout << "Hora de inicio: ";
+            cin >> startHour;
+
+            cout << "Hora de fin: ";
+            cin >> endHour;
+
+            cout << "Dia: ";
+            cin >> day;
+
+            break;
+        }
+        case 2: {
+            break;
+        }
+        default: {
+            cout << "Opcion invalida" << endl;
+            break;
+        }
+        }
+
+    } while (option != 2);
+}
+
+void printInstructions()
+{
+    cout << endl << endl;
+    cout << "******************** INSTRUCCIONES ********************" << endl;
+    cout << "Sigue los siguientes pasos para agregar un curso: " << endl;
+    cout << "1. Ingresa el codigo del curso que deseas agregar,\nencontraras la lista de cursos luego de este aviso" << endl << endl;
+    cout << "2. Luego ingresa la hora de inicio y la hora de fin, debe ser en formato 24h.\nEjemplo: si tu clase inicia a las 10am y finaliza a las 2pm debes ingresar 10 y 14 respectivamente" << endl << endl;
+    cout << "3. Ingresa el dia, en este caso debes ingresar el numero del dia.\nEjemplo: para el lunes ingresa el 1, el 2 para el martes, 3 para el miercoles y así hasta el domingo" << endl << endl;
+    cout << "************************************************************" << endl << endl;
+}
