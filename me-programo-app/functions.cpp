@@ -57,6 +57,8 @@ int menu()
     return opc;
 }
 
+// Funciones para gestionar los cursos
+
 void manageCourses()
 {
     int option;
@@ -77,11 +79,17 @@ void manageCourses()
         addCourse(courses);
         break;
     }
+    case 2:{
+        showAllCourses(courses);
+        break;
+    }
     default: {
         cout << "Opcion invalida" << endl;
         break;
     }
     }
+
+    courses.close();
 }
 
 void addCourse(fstream &file)
@@ -116,9 +124,173 @@ void addCourse(fstream &file)
     file << code << "," << name << "," << credits << "," << htd << "," << hti << "\n";
 }
 
+void showAllCourses(fstream &file)
+{
+    file.seekg(0, file.end);
+    unsigned long long fileLength = file.tellg();
+    file.seekg(0, file.beg);
 
+    char * fileContent = new char[fileLength];
+
+    file.read(fileContent, fileLength);
+
+    unsigned long long index = 0;
+    unsigned long long total = 0;
+
+    while (index < fileLength) {
+        if (fileContent[index] == '\n') total++;
+        index++;
+    }
+
+    char courses[total][400];
+
+    unsigned long long i = 0;
+    unsigned long long j = 0;
+
+    while (i < fileLength && j < total) {
+        int k = 0;
+        while (i < fileLength && fileContent[i] != '\n' && k < 400-1) {
+            courses[j][k] = fileContent[i];
+            i++;
+            k++;
+        }
+        courses[j][k] = '\0';
+        i++;
+        j++;
+    }
+
+    unsigned long long totalLines = j;
+
+    for (unsigned long long j = 0; j < totalLines; j++) {
+        cout << courses[j] << endl;
+    }
+}
+
+
+
+// Funciones para administrar el horario
 void manageSchedule()
 {
+    int option;
 
+    cout << endl;
+    cout << "******************** Administrar horario ********************" << endl;
+    cout << "1. Ver mi horario" << endl;
+    cout << "2. Actualizar mi horario" << endl;
+
+    cout << "Selecciona una opcion: ";
+    cin >> option;
+
+    fstream schedule;
+    schedule.open("horario.txt", ios::binary | ios::in | ios::out | ios::ate);
+
+    switch (option) {
+    case 1:{
+        printSchedule(schedule);
+        break;
+    }
+    case 2: {
+        updateSchedule(schedule);
+        break;
+    }
+    default: {
+        cout << "Opcion invalida" << endl;
+        break;
+    }
+    }
+
+}
+
+void printSchedule(fstream &file)
+{
+    file.seekg(0, file.end);
+    unsigned long long fileLength = file.tellg();
+    file.seekg(0, file.beg);
+
+    char * fileContent = new char[fileLength];
+
+    file.read(fileContent, fileLength);
+
+    int ROWS = 18;
+    int COLS = 7;
+    int ELEMENT_LENGTH = 8;
+    char matrix[ROWS][COLS][ELEMENT_LENGTH];
+    char delimiter = ',';
+
+    int row = 0;
+    int col = 0;
+    int elementIndex = 0;
+
+    for (unsigned long long i = 0; i < fileLength; i++) {
+        if (fileContent[i] == delimiter) {
+            matrix[row][col][elementIndex] = '\0';
+            col++;
+            elementIndex = 0;
+            continue;
+        }
+        if (fileContent[i] == '\n') {
+            matrix[row][col][elementIndex] = '\0';
+            row++;
+            col = 0;
+            elementIndex = 0;
+            continue;
+        }
+        matrix[row][col][elementIndex] = fileContent[i];
+        elementIndex++;
+    }
+    cout << endl << endl;
+    cout << "Lunes" << '\t' << "Martes" << '\t' << "Mierco" << '\t' << "Jueves" << '\t' << "Viernes" << '\t' << "Sabado" << '\t' << "Domingo" << endl;
+    for (int k = 0; k < ROWS; k++) {
+        for (int l = 0; l < COLS; l++) {
+            cout << matrix[k][l] << '\t';
+        }
+        cout << endl;
+    }
+}
+
+void updateSchedule(fstream &file)
+{
+    file.seekg(0, file.end);
+    unsigned long long fileLength = file.tellg();
+    file.seekg(0, file.beg);
+
+    char * fileContent = new char[fileLength];
+
+    file.read(fileContent, fileLength);
+
+    int ROWS = 18;
+    int COLS = 7;
+    int ELEMENT_LENGTH = 8;
+    char matrix[ROWS][COLS][ELEMENT_LENGTH];
+    char delimiter = ',';
+
+    int row = 0;
+    int col = 0;
+    int elementIndex = 0;
+
+    for (unsigned long long i = 0; i < fileLength; i++) {
+        if (fileContent[i] == delimiter) {
+            matrix[row][col][elementIndex] = '\0';
+            col++;
+            elementIndex = 0;
+            continue;
+        }
+        if (fileContent[i] == '\n') {
+            matrix[row][col][elementIndex] = '\0';
+            row++;
+            col = 0;
+            elementIndex = 0;
+            continue;
+        }
+        matrix[row][col][elementIndex] = fileContent[i];
+        elementIndex++;
+    }
+
+    for (int k = 0; k < ROWS; k++) {
+        for (int l = 0; l < COLS; l++) {
+            cout << matrix[k][l] << " ";
+        }
+        cout << endl;
+    }
 }
 
